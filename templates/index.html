@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDF Q&A Assistant</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <div class="logo">
+                    <svg class="logo-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M14 2H6C5.46957 2 4.96086 2.21071 4.58579 2.58579C4.21071 2.96086 4 3.46957 4 4V20C4 20.5304 4.21071 21.0391 4.58579 21.4142C4.96086 21.7893 5.46957 22 6 22H18C18.5304 22 19.0391 21.7893 19.4142 21.4142C19.7893 21.0391 20 20.5304 20 20V8L14 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M14 2V8H20" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M16 13H8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M16 17H8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M10 9H8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    <h1>PDF Q&A Assistant</h1>
+                </div>
+                <div class="header-actions">
+                    <button class="theme-toggle" id="themeToggle" title="Toggle dark mode">
+                        <svg class="theme-icon-sun" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="display: none;">
+                            <circle cx="12" cy="12" r="5" stroke="currentColor" stroke-width="2"/>
+                            <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                        <svg class="theme-icon-moon" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </button>
+                    <div class="user-menu" id="userMenu" style="display: none;">
+                        <button class="user-avatar" id="userAvatar" title="Profile">
+                            <img id="userAvatarImg" src="" alt="Avatar" class="user-avatar-img" onerror="this.style.display='none'">
+                            <div class="user-avatar-placeholder" id="userAvatarPlaceholder">?</div>
+                        </button>
+                        <div class="user-dropdown" id="userDropdown" style="display: none;">
+                            <div class="user-info">
+                                <span class="user-name" id="userName"></span>
+                                <span class="user-email" id="userEmail"></span>
+                            </div>
+                            <button class="profile-btn" id="openProfileBtn">Profile & History</button>
+                            <button class="logout-btn" id="logoutBtn">Log out</button>
+                        </div>
+                    </div>
+                    <div class="status-indicator">
+                        <span class="status-dot" id="statusDot"></span>
+                        <span class="status-text" id="statusText">Checking...</span>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Upload Section -->
+            <section class="upload-section" id="uploadSection">
+                <div class="upload-card">
+                    <div class="upload-icon">
+                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M21 15V19C21 19.5304 20.7893 20.0391 20.4142 20.4142C20.0391 20.7893 19.5304 21 19 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <polyline points="17,8 12,3 7,8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <line x1="12" y1="3" x2="12" y2="15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </div>
+                    <h2>Upload a Document</h2>
+                    <p>Select a PDF or image file to start asking questions about its content</p>
+
+                    <div class="upload-area" id="dropArea">
+                        <input type="file" id="fileInput" accept=".pdf,.docx,.jpg,.jpeg,.png,.webp,.bmp" hidden>
+                        <div class="upload-placeholder">
+                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M13 2H6C5.46957 2 4.96086 2.21071 4.58579 2.58579C4.21071 2.96086 4 3.46957 4 4V20C4 20.5304 4.21071 21.0391 4.58579 21.4142C4.96086 21.7893 5.46957 22 6 22H18C18.5304 22 19.0391 21.7893 19.4142 21.4142C19.7893 21.0391 20 20.5304 20 20V8L13 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                            <span>Click to browse or drag and drop</span>
+                            <span class="upload-hint">PDF, DOCX, images (JPG, PNG), max 25MB</span>
+                        </div>
+                    </div>
+
+                    <div class="file-info" id="fileInfo" style="display: none;">
+                        <div class="file-icon" id="fileIcon">📄</div>
+                        <div class="file-details">
+                            <span class="file-name" id="fileName"></span>
+                            <span class="file-status" id="fileStatus">Processing...</span>
+                        </div>
+                        <button class="btn-remove" id="removeFile" title="Remove file">×</button>
+                    </div>
+
+                    <div class="error-message" id="errorMessage" style="display: none;"></div>
+                </div>
+            </section>
+
+            <!-- Chat Section -->
+            <section class="chat-section" id="chatSection" style="display: none;">
+                <div class="chat-container">
+                    <!-- Chat Header -->
+                    <div class="chat-header">
+                        <div class="chat-doc-info">
+                            <span class="doc-icon" id="docIcon">📄</span>
+                            <div class="doc-details">
+                                <span class="doc-name" id="docName"></span>
+                                <span class="doc-status">Ready for questions</span>
+                            </div>
+                        </div>
+                        <div class="chat-header-actions">
+                            <button class="btn-secondary" id="uploadNew">Upload New</button>
+                            <button class="btn-primary" id="generateQuiz" style="display: none;">Generate Quiz</button>
+                        </div>
+                    </div>
+
+                    <!-- Messages -->
+                    <div class="chat-messages" id="chatMessages">
+                        <div class="message message-assistant">
+                            <div class="message-avatar">AI</div>
+                            <div class="message-content">
+                                Hello! I've analyzed your document. You can now ask me any questions about its content.
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Input Area -->
+                    <div class="chat-input-area">
+                        <div class="input-container">
+                            <textarea
+                                id="messageInput"
+                                placeholder="Ask a question about the document..."
+                                rows="1"
+                                disabled
+                            ></textarea>
+                            <button class="send-button" id="sendButton" disabled>
+                                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <line x1="22" y1="2" x2="11" y2="13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <polygon points="22,2 15,22 11,13 2,9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </button>
+                        </div>
+                        <div class="typing-indicator" id="typingIndicator" style="display: none;">
+                            <div class="typing-avatar"></div>
+                            <div class="typing-content">
+                                <span class="typing-dots">
+                                    <span></span><span></span><span></span>
+                                </span>
+                                <span class="typing-text">AI is thinking...</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Quiz Section -->
+                    <section class="quiz-section" id="quizSection" style="display: none;">
+                        <div class="quiz-container">
+                            <div class="quiz-header">
+                                <h3>Knowledge Check Quiz</h3>
+                                <button class="btn-close" id="closeQuiz">&times;</button>
+                            </div>
+                            <div class="quiz-content" id="quizContent">
+                                <p>Loading quiz...</p>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>Powered by Emicyber</p>
+        </footer>
+    </div>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+
+    <!-- Side Drawer Panel for Profile & History -->
+    <div class="drawer-overlay" id="drawerOverlay" style="display: none;"></div>
+    <div class="side-drawer" id="sideDrawer">
+        <button class="drawer-close" id="drawerClose">&times;</button>
+
+        <!-- Drawer Tabs -->
+        <div class="drawer-tabs">
+            <button class="drawer-tab active" data-drawer-tab="profile">Profile</button>
+            <button class="drawer-tab" data-drawer-tab="history">History</button>
+        </div>
+
+        <!-- Profile Tab Content -->
+        <div class="drawer-content drawer-content-active" id="drawerProfile">
+            <div class="drawer-section">
+                <h3>Your Profile</h3>
+
+                <!-- Avatar Upload -->
+                <div class="drawer-avatar-section">
+                    <div class="drawer-avatar-preview">
+                        <img id="drawerAvatarImg" src="" alt="Your avatar" onerror="this.style.display='none'">
+                        <div class="drawer-avatar-placeholder" id="drawerAvatarPlaceholder">?</div>
+                    </div>
+                    <input type="file" id="drawerAvatarInput" accept=".png,.jpg,.jpeg,.gif,.webp" hidden>
+                    <button class="btn-secondary" id="drawerChangeAvatarBtn">Change Avatar</button>
+                    <p class="drawer-hint">Max 5MB. PNG, JPG, GIF, WebP</p>
+                </div>
+
+                <!-- Display Name -->
+                <div class="drawer-form-group">
+                    <label for="drawerDisplayName">Display Name</label>
+                    <input type="text" id="drawerDisplayName" name="displayName" maxlength="100">
+                </div>
+
+                <button class="btn-primary" id="drawerSaveProfileBtn">Save Changes</button>
+                <div class="drawer-message" id="drawerProfileMessage"></div>
+            </div>
+        </div>
+
+        <!-- History Tab Content -->
+        <div class="drawer-content" id="drawerHistory">
+            <div class="drawer-section">
+                <h3>Document History</h3>
+                <div id="drawerDocumentList" class="drawer-document-list">
+                    <!-- Populated by JS -->
+                    <p class="drawer-empty">No documents yet. Upload your first document to get started!</p>
+                </div>
+
+                <!-- Chat History Viewer (shown when viewing chat for a doc) -->
+                <div class="drawer-chat-history" id="drawerChatHistory" style="display: none;">
+                    <div class="drawer-chat-header">
+                        <button class="btn-back" id="drawerChatBackBtn">← Back</button>
+                        <h4 id="drawerChatDocName"></h4>
+                    </div>
+                    <div id="drawerChatMessages" class="drawer-chat-messages">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

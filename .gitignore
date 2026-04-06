@@ -1,0 +1,40 @@
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+env/
+.venv
+venv_fresh/
+pip-log.txt
+pip-delete-this-directory.txt
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Uploads (optional - if you want to persist uploaded files)
+uploads/
+temp/
+
+# Local data (SQLite database, avatars, etc.) - not needed in production
+data/
+
+# Testing scripts
+test_*.py
+setup_database.py
+verify_setup.py
+quick_test.py

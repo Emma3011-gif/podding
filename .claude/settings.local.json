@@ -1,0 +1,32 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python:*)",
+      "Bash(venv/Scripts/python.exe -m py_compile app.py)",
+      "Bash(venv/Scripts/python.exe:*)",
+      "Bash(ls:*)",
+      "Bash(.\\\\venv\\\\Scripts\\\\python.exe:*)",
+      "Bash(venv/Scripts/pip.exe install:*)",
+      "Bash(where python:*)",
+      "Read(//c/Windows/System32/**)",
+      "Read(//c/Users/user/AppData/Local/Programs/Python/python312/**)",
+      "Read(//c/Users/**)",
+      "Bash(/c/Users/user/AppData/Local/Programs/Python/python312/python.exe:*)",
+      "Bash(venv_fresh/Scripts/pip.exe install:*)",
+      "Bash(venv_fresh/Scripts/python.exe:*)",
+      "Bash([ -d \"templates\" ])",
+      "Bash(python3 -c \"import app; print\\('App can be imported'\\)\")",
+      "Bash(chmod +x \"C:\\\\Users\\\\user\\\\Desktop\\\\work\\\\deploy.sh\")",
+      "Bash(chmod +x \"C:\\\\Users\\\\user\\\\Desktop\\\\work\\\\verify_package.py\")",
+      "Bash(pip list:*)",
+      "Bash(openssl rand:*)",
+      "Bash(pip show:*)",
+      "Bash(pip install:*)",
+      "Bash(USE_BLOB_STORAGE=1 python:*)",
+      "Bash(git init:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git rm:*)"
+    ]
+  }
+}
