@@ -1,6 +1,0 @@
-# Include template and static files in source distributions and wheels
-recursive-include templates *
-recursive-include static *
-
-# Also include .env file if needed (usually not for security)
-# include .env.example
