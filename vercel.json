@@ -1,12 +1,12 @@
 {
   "routes": [
     {
-      "src": "/(.*)",
-      "dest": "/app.py"
+      "src": "/",
+      "dest": "/"
  },
   {
-    "src": "/static/(.*)",
-    "dest": "/static/$1"
+    "src": "/test",
+    "dest": "/"
   }
   ]
 
